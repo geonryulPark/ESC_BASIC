@@ -32,9 +32,10 @@ android {
         jvmTarget = '1.8'
     }
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
     }
+
 }
 
 dependencies {
@@ -51,5 +52,6 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
-     kapt "org.xerial:sqlite-jdbc:3.34.0" // 추가했음
+    kapt "org.xerial:sqlite-jdbc:3.36.0" // 추가했음
+
 }

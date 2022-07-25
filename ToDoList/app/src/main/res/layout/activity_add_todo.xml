@@ -6,40 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".AddTodoActivity">
 
-
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
         />
 
     <EditText
         android:id="@+id/edt_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:hint="@string/hint_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
-        android:hint="@string/hint_title"
         android:imeOptions="actionDone"
         android:inputType="text"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+        />
 
     <TextView
-        android:id="@+id/tv_importance"
+        android:id="@+id/importance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/importance"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_title"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
         />
@@ -48,9 +48,10 @@
         android:id="@+id/radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_importance"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="20dp">
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/importance">
 
         <RadioButton
             android:id="@+id/btn_low"
@@ -76,13 +77,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/completion"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="20dp"
         />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
