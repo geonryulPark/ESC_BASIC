@@ -1,6 +1,8 @@
 package com.eos.todolist.db
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 
 // 1. abstract class
@@ -14,6 +16,16 @@ abstract class AppDatabase : RoomDatabase() {
 
     // singleton 구현하기 위한 companion object
     companion object {
-        
+        val databaseName = "db_todo"
+        var appDatabase: AppDatabase? = null
+
+        fun getInstance(context: Context) : AppDatabase? {
+            if (appDatabase == null) {
+                appDatabase = Room.databaseBuilder(context,
+                    AppDatabase::class.java,
+                    databaseName).build()
+            }
+            return appDatabase
+        }
     }
 }
