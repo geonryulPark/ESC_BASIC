@@ -67,12 +67,8 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener {
         builder.setTitle("할 일 삭제")
         builder.setMessage("정말 삭제하시겠습니까?")
 //        builder.setNegativeButton("아니오", null)
-        builder.setPositiveButton("네",
-            object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    deleteTodo(position)
-                }
-            })
+        builder.setPositiveButton("네"
+        ) { p0, p1 -> deleteTodo(position) }
         builder.setNegativeButton("아니오", null)
         builder.show()
     }
