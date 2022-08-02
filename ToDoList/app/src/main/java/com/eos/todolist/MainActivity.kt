@@ -2,11 +2,10 @@ package com.eos.todolist
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eos.todolist.databinding.ActivityMainBinding
 import com.eos.todolist.db.AppDatabase
@@ -22,6 +21,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener {
 
     private lateinit var db : AppDatabase
     private lateinit var toDoDao: ToDoDao
+
     private lateinit var todoList: ArrayList<ToDoEntity>
     private lateinit var adapter: TodoRecyclerViewAdapter
 
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener {
             startActivity(intent)
         }
 
-        // db instance 를 가져오고, dao까지 불러온다.
+        // db instance 를 가져오고, dao 까지 불러온다.
         db = AppDatabase.getInstance(this)!!
         toDoDao = db.getTodoDao()
 

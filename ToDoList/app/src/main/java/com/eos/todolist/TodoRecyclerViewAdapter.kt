@@ -53,6 +53,4 @@ class TodoRecyclerViewAdapter(private val todoList: ArrayList<ToDoEntity>,
     override fun getItemCount(): Int {
         return todoList.size
     }
-
-
 }
