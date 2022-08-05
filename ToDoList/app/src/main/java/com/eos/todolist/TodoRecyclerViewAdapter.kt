@@ -44,6 +44,7 @@ class TodoRecyclerViewAdapter(private val todoList: ArrayList<ToDoEntity>,
 
         holder.tv_importance.text = todoData.importance.toString()
         holder.tv_title.text = todoData.title
+
         holder.root.setOnLongClickListener {
             listener.onLongClick(position)
             true

@@ -66,10 +66,10 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("할 일 삭제")
         builder.setMessage("정말 삭제하시겠습니까?")
-//        builder.setNegativeButton("아니오", null)
-        builder.setPositiveButton("네"
-        ) { p0, p1 -> deleteTodo(position) }
         builder.setNegativeButton("아니오", null)
+
+        builder.setPositiveButton("네")
+        { p0, p1 -> deleteTodo(position) }
         builder.show()
     }
 
@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener {
         Thread {
             toDoDao.deleteTodo(todoList[position])
             todoList.removeAt(position)
+
             runOnUiThread {
                 adapter.notifyDataSetChanged()
                 Toast.makeText(this, "삭제되었습니다.",
