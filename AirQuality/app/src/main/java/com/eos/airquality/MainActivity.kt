@@ -20,8 +20,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.eos.airquality.retrofit.AirQualityResponse
+import com.eos.airquality.retrofit.AirQualityService
+import com.eos.airquality.retrofit.RetrofitConnection
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import java.io.IOException
 import java.lang.IllegalArgumentException
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +55,13 @@ class MainActivity : AppCompatActivity() {
 
         checkAllPermissions()
         updateUI()
+        setRefreshButton()
+    }
+
+    private fun setRefreshButton() {
+        binding.btnRefresh.setOnClickListener {
+            updateUI()
+        }
     }
 
     private fun getCurrentAddress(latitude: Double, longitude: Double): Address? {
@@ -103,6 +120,7 @@ class MainActivity : AppCompatActivity() {
                 binding.tvLocationSubTitle.text = "${it.countryName} ${it.adminArea}"
             }
             // 2. 현재 미세먼지 농도를 가져오고 UI 업데이트
+            getAirQualityData(latitude, longitude)
 
 
         } else {
@@ -111,6 +129,75 @@ class MainActivity : AppCompatActivity() {
                 "위도, 경도 정보를 가져올 수 없습니다. 새로고침을 눌러주십시오.",
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    private fun getAirQualityData(latitude: Double, longitude: Double) {
+        val retrofitAPI = RetrofitConnection.getInstance().create(AirQualityService::class.java)
+
+        retrofitAPI.getAirQualityData(
+            latitude.toString(),
+            longitude.toString(),
+            "98fb5959-0fb7-4a87-9f48-e23ebd83357d"
+        ).enqueue(object : Callback<AirQualityResponse> {
+            override fun onResponse(
+                call: Call<AirQualityResponse>,
+                response: Response<AirQualityResponse>
+            ) {
+                // 정상적인 response 가 왔다면 UI 업데이트
+                if (response.isSuccessful) {
+                    Toast.makeText(this@MainActivity,
+                        "최신 정보 업데이트 완료", Toast.LENGTH_SHORT).show()
+                    response.body()?.let { updateAirUI(it) }
+                } else {
+                    Toast.makeText(this@MainActivity,
+                        "업데이트에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<AirQualityResponse>, t: Throwable) {
+                t.printStackTrace()
+                Toast.makeText(this@MainActivity, "업데이트에 실패하였습니다.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun updateAirUI(airQualityData: AirQualityResponse) {
+        val pollutionData = airQualityData.data.current.pollution
+
+        // 수치 지정
+        binding.tvCount.text = pollutionData.aqius.toString()
+
+        // 측정된 날짜 지정
+        val dateTime = ZonedDateTime.parse(pollutionData.ts).withZoneSameInstant(
+            ZoneId.of("Asia/Seoul"))
+            .toLocalDateTime()
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(
+            "yyyy-MM-dd HH:mm")
+
+        binding.tvCheckTime.text = dateTime.format(dateFormatter).toString()
+
+        when (pollutionData.aqius) {
+            in 0..50 -> {
+                binding.tvTitle.text = "좋음"
+                binding.imgBg.setImageResource(R.drawable.bg_good)
+            }
+
+            in 51..150 -> {
+                binding.tvTitle.text = "보통"
+                binding.imgBg.setImageResource(R.drawable.bg_soso)
+            }
+
+            in 151..200 -> {
+                binding.tvTitle.text = "나쁨"
+                binding.imgBg.setImageResource(R.drawable.bg_bad)
+            }
+
+            else -> {
+                binding.tvTitle.text = "매우 나쁨"
+                binding.imgBg.setImageResource(R.drawable.bg_worst)
+            }
         }
     }
 
